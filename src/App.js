@@ -7,7 +7,7 @@ const GetFinalOpenedDoors = () => {
   const output1 = algorithms.getFinalOpenedDoors(100);
   const output2 = algorithms.getFinalOpenedDoorsSkips(100);
   const output3 = algorithms.getFinalOpenedDoorsObjSkips(100);
-  const output02a = algorithms02.solve24('1127'); // Input digits
+  const output02a = algorithms02.solve24('2456'); // Input digits
   const output02b = algorithms02.operationCombinations(4); // 4 operations
   
   const show = '24Game';

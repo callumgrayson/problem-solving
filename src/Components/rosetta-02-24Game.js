@@ -62,7 +62,10 @@ const algorithms02 = {
     const ordSet = [...groups];
     let sets24 = [];
     this.calc24(digitSet, opSet, ordSet, sets24);
-    console.log(sets24);
+    // console.log(sets24);
+
+    const stringsArray = this.convertArraysToString(sets24);
+    console.log(stringsArray);
 
     return sets24;
   },
@@ -260,6 +263,309 @@ const algorithms02 = {
     return retIntArr;
   },
 
+  convertArraysToString(sets24) {
+    // console.log(sets24);
+    let retArr = [];
+
+    for (let i = 0; i < sets24.length; i++) {
+      // get phaseObj
+
+      // ****************
+      // i = 8 is an example of a negative scenario
+      // ________________
+      let phaseObj = this.getPhaseObj(sets24[i]); // CHANGE back after!!! to i
+      // console.log(phaseObj);
+      // get phaseStr
+      let phaseStr = this.getPhaseStr(phaseObj);
+      // push phaseStr to returnObj
+      retArr.push(phaseStr);
+      // return returnObj
+       // ************************** And replace this below to include all items
+    }
+    return retArr;
+  },
+
+  getPhaseObj(inArr) {
+    console.log(inArr);
+    // console.log(inArr[0]);
+    const newInArr0 = [...inArr[0]];
+    // console.log(newInArr0);
+
+
+    // get order indexes
+    const first = inArr[2].indexOf(1);
+    const second = inArr[2].indexOf(2);
+    const third = inArr[2].indexOf(3); 
+    // console.log(first, second, third);
+
+    const posFirst = first === 0 ? 'L' : (first === 1 ? 'M' : 'R');
+    const posSecond = second === 0 ? 'L' : (second === 1 ? 'M' : 'R');
+    const posThird = third === 0 ? 'L' : (third === 1 ? 'M' : 'R');
+
+    // splice at inArr[first] cut 2 replace with [inArr[0][first], inArr[0][first + 1]]
+    newInArr0.splice(first, 2, [inArr[0][first], inArr[0][first + 1]]);
+    // console.log(newInArr0);
+
+    // get vals based on first
+    const d1 = newInArr0[first];
+    const op1 = inArr[1][first];
+    
+
+    const d2 = newInArr0[second];
+    const op2 = inArr[1][second];
+    
+    const d3 = newInArr0[third];
+    const op3 = inArr[1][third];
+
+    const retPhObj = {
+      phase1: {
+        d1: d1,
+        op: op1,
+        opInd: first,
+        pos: posFirst,
+      },
+      phase2: {
+        d2: d2,
+        op: op2,
+        opInd: second,
+        pos: posSecond,
+      },
+      phase3: {
+        d3: d3,
+        op: op3,
+        opInd: third,
+        pos: posThird,
+      }
+    }
+
+    return retPhObj;
+  },
+
+  getPhaseStr(inObj) {
+    console.log(inObj);
+    // Gets the type of operation from each phase object
+    let opPat1 = inObj.phase1.op;
+    let opPat2 = inObj.phase2.op;
+    let opPat3 = inObj.phase3.op;
+
+    const opP1 = opPat1 < 3 ? 'a' : 'm';
+    const opP2 = opPat2 < 3 ? 'a' : 'm';
+    const opP3 = opPat3 < 3 ? 'a' : 'm';
+
+    const d1a = inObj.phase1.d1[0];
+    const d1b = inObj.phase1.d1[1];
+    const d2 = inObj.phase2.d2;
+    const d3 = inObj.phase3.d3;
+
+    // first second third
+    const opInd1 = inObj.phase1.opInd;
+    const opInd2 = inObj.phase2.opInd;
+    const opInd3 = inObj.phase3.opInd;
+
+
+    // conditions G
+    const testG = (opP1 === 'a' && opP2 === 'm' && opP3 === 'a') && (opInd3 === 1);
+    // conditions F
+    const testF = (opP1 === 'a' && opP2 === 'a' && opP3 === 'm') && (opInd3 === 1);
+    // conditions DE
+    const testDE = (opP2 === 'a' && opP3 === 'm');
+    // conditions ABC
+    const testABC = (opP1 === 'a' && opP2 === 'm' && Math.abs(opInd1 - opInd2) === 1);
+    // Need to add in condition for if the result of operation is negative
+    const testNeg1 = ((opPat1 === 2 && opPat2 === 2) || (opPat2 === 2 && opPat3 === 2));
+    console.log('Negative! ', testNeg1);
+
+    // Get string vals of ops
+    let getOp = (key) => {
+      if (key === 1) {
+        return '+';
+      } else if (key === 2) {
+        return '-';
+      } else if (key === 3) {
+        return '*';
+      } else if (key === 4) {
+        return '/';
+      }
+    }
+
+    const op1Str = getOp(opPat1);
+    const op2Str = getOp(opPat2);
+    const op3Str = getOp(opPat3);
+
+    const g1Arr = [d1a, op1Str, d1b, {phase: 1}];
+    const g2Arr = [d2, op2Str,, {phase: 2}];
+    const g3Arr = [d3, op3Str,, {phase: 3}];
+
+    // console.log(g1Arr);
+    // console.log(g2Arr);
+    // console.log(g3Arr);
+
+    // TO Be REDUNDANT*********
+    // const _chunk1Left = opInd1 === 0 ? g1Str : (opInd2 === 0 ? g2Str : g3Str);
+    // const _chunk2Mid = opInd1 === 1 ? g1Str : (opInd2 === 1 ? g2Str : g3Str);
+    // const _chunk3End = opInd1 === 2 ? g1Str : (opInd2 === 2 ? g2Str : g3Str);
+    // END of REDUNDANT__________
+
+    const chunk1Left = opInd1 === 0 ? g1Arr : (opInd2 === 0 ? g2Arr : g3Arr);
+    const chunk2Mid = opInd1 === 1 ? g1Arr : (opInd2 === 1 ? g2Arr : g3Arr);
+    const chunk3End = opInd1 === 2 ? g1Arr : (opInd2 === 2 ? g2Arr : g3Arr);
+
+    console.log(chunk1Left, chunk2Mid, chunk3End);
+
+    // TEMP ONLY DELETE after use ******************************************
+
+    // const gStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
+    //   console.log('testG ', gStr);
+    //   const fStr = `(${chunk1Left})${chunk2Mid}(${chunk3End})`;
+    //   console.log('testF ', fStr);
+    //   const deStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
+    //   console.log('testDE ', deStr);
+    //   const abcStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
+    //   console.log('testABC ', abcStr);
+
+
+    // END of TEMP section _________________________________________________
+
+    const cL1 = chunk1Left[0];
+    const cL2 = chunk1Left[2];
+    const cLop = chunk1Left[1];
+    const cLphase = chunk1Left[3].phase;
+    const cM1 = chunk2Mid[0];
+    const cM2 = chunk2Mid[2]; 
+    const cMop = chunk2Mid[1];
+    const cMphase = chunk2Mid[3].phase;
+    const cR1 = chunk3End[0];
+    const cR2 = chunk3End[2];
+    const cRop = chunk3End[1];
+    const cRphase = chunk3End[3].phase;
+    
+    // Conditionally adding brackets
+    if (testNeg1) {
+
+      // Must have brackets if a negative is produced
+      // 
+      const bracketChunk = (opPat1 === 2 && opPat2 === 2) ? 2 : 3;
+
+      const negArr = [];
+
+      if (cLphase === 1) {
+        const tempChunk = [cL1, cLop, cL2];
+        negArr.push(...tempChunk);
+      } else {
+        negArr.push(cL1, cLop);
+      }
+
+      if (bracketChunk === 2) {
+        const tempChunk2 = ['(', cM1, cMop, cM2, ')'];
+        negArr.push(...tempChunk2);
+      } else if (cLphase === 1) {
+        negArr.push(cMop, cM1);
+      } else {
+        negArr.push(cM1, cMop)
+      }
+
+      if (cRphase === 1) {
+        const tempChunk3 = [cR1, cRop, cR2];
+        negArr.push(...tempChunk3);
+      } else {
+        negArr.push(cRop, cR1)
+      }
+
+      const negStr = negArr.join('');
+      console.log('negStr ', negStr);
+      return negStr;
+
+
+    } else if (testG) {
+
+      // G string has no brackets - special case of no brackets though
+      const gStr = [];
+      gStr.push(cL1, cLop);
+      if (cL2) {
+        gStr.push(cL2);
+        gStr.push(cMop, cM1);
+        gStr.push(cRop, cR1);
+      } else if (cM2) {
+        gStr.push(cM1, cMop, cM2);
+        gStr.push(cRop, cR1);
+      } else if (cR2) {
+        gStr.push(cMop, cM1);
+        gStr.push(cR1, cRop, cR2);
+      } 
+
+      const retStr = gStr.join('');
+      console.log('testG ', retStr);
+      return 'gStr';
+
+    } else if (testF) {
+      
+      // F string has two sets of brackets
+      const fStr = `(${chunk1Left})${chunk2Mid}(${chunk3End})`;
+      console.log('testF ');
+      return 'fStr not completed';
+      
+    } else if (testDE) {
+      // Big brackets, one of two positions
+      const deStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
+      console.log('testDE ');
+      return 'deStr not completed';
+
+    } else if (testABC) {
+      // Small brackets, one of three positions
+      // Only one bracket and it goes around the phase 1 items
+      const abcArr = [];
+
+      if (cLphase === 1) {
+        const tempChunk = ['(', cL1, cLop, cL2, ')'];
+        abcArr.push(...tempChunk);
+      } else {
+        abcArr.push(cL1, cLop);
+      }
+
+      if (cMphase === 1) {
+        const tempChunk2 = ['(', cM1, cMop, cM2, ')'];
+        abcArr.push(...tempChunk2);
+      } else if (cLphase === 1) {
+        abcArr.push(cMop, cM1);
+      } else {
+        abcArr.push(cM1, cMop)
+      }
+
+      if (cRphase === 1) {
+        const tempChunk3 = ['(', cR1, cRop, cR2, ')'];
+        abcArr.push(...tempChunk3);
+      } else {
+        abcArr.push(cRop, cR1)
+      }
+
+      const abcStr = abcArr.join('');
+      console.log('abcStr ', abcStr);
+      return abcStr;
+
+    } else {
+
+      // No brackets and put together in order of appearance
+      const noBrStr = [];
+      noBrStr.push(cL1, cLop);
+      if (cL2) {
+        noBrStr.push(cL2);
+        noBrStr.push(cMop, cM1);
+        noBrStr.push(cRop, cR1);
+      } else if (cM2) {
+        noBrStr.push(cM1, cMop, cM2);
+        noBrStr.push(cRop, cR1);
+      } else if (cR2) {
+        noBrStr.push(cMop, cM1);
+        noBrStr.push(cR1, cRop, cR2);
+      } 
+
+      const retStr = noBrStr.join('');
+      console.log('noBrStr ', retStr);
+      return retStr;
+
+    }
+
+  },
 
 }
 
