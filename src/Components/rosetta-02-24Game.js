@@ -41,7 +41,7 @@ const algorithms02 = {
     let combos = [];
     this.removeOneDigit(nArr, pArr, combos);
     combos = this.retInts(combos);
-    // console.log(combos);
+    console.log(combos);
     
     const ops = this.operationCombinations(4);
     // console.log(ops);
@@ -65,7 +65,7 @@ const algorithms02 = {
     // console.log(sets24);
 
     const stringsArray = this.convertArraysToString(sets24);
-    console.log(stringsArray);
+    // console.log(stringsArray);
 
     return sets24;
   },
@@ -286,7 +286,7 @@ const algorithms02 = {
   },
 
   getPhaseObj(inArr) {
-    console.log(inArr);
+    // console.log(inArr);
     // console.log(inArr[0]);
     const newInArr0 = [...inArr[0]];
     // console.log(newInArr0);
@@ -342,7 +342,7 @@ const algorithms02 = {
   },
 
   getPhaseStr(inObj) {
-    console.log(inObj);
+    // console.log(inObj);
     // Gets the type of operation from each phase object
     let opPat1 = inObj.phase1.op;
     let opPat2 = inObj.phase2.op;
@@ -373,7 +373,7 @@ const algorithms02 = {
     const testABC = (opP1 === 'a' && opP2 === 'm' && Math.abs(opInd1 - opInd2) === 1);
     // Need to add in condition for if the result of operation is negative
     const testNeg1 = ((opPat1 === 2 && opPat2 === 2) || (opPat2 === 2 && opPat3 === 2));
-    console.log('Negative! ', testNeg1);
+    // console.log('Negative! ', testNeg1);
 
     // Get string vals of ops
     let getOp = (key) => {
@@ -410,7 +410,7 @@ const algorithms02 = {
     const chunk2Mid = opInd1 === 1 ? g1Arr : (opInd2 === 1 ? g2Arr : g3Arr);
     const chunk3End = opInd1 === 2 ? g1Arr : (opInd2 === 2 ? g2Arr : g3Arr);
 
-    console.log(chunk1Left, chunk2Mid, chunk3End);
+    // console.log(chunk1Left, chunk2Mid, chunk3End);
 
     // TEMP ONLY DELETE after use ******************************************
 
@@ -472,7 +472,7 @@ const algorithms02 = {
       }
 
       const negStr = negArr.join('');
-      console.log('negStr ', negStr);
+      // console.log('negStr ', negStr);
       return negStr;
 
 
@@ -494,20 +494,20 @@ const algorithms02 = {
       } 
 
       const retStr = gStr.join('');
-      console.log('testG ', retStr);
+      // console.log('testG ', retStr);
       return 'gStr';
 
     } else if (testF) {
       
       // F string has two sets of brackets
       const fStr = `(${chunk1Left})${chunk2Mid}(${chunk3End})`;
-      console.log('testF ');
+      // console.log('testF ');
       return 'fStr not completed';
       
     } else if (testDE) {
       // Big brackets, one of two positions
       const deStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
-      console.log('testDE ');
+      // console.log('testDE ');
       return 'deStr not completed';
 
     } else if (testABC) {
@@ -560,7 +560,7 @@ const algorithms02 = {
       } 
 
       const retStr = noBrStr.join('');
-      console.log('noBrStr ', retStr);
+      // console.log('noBrStr ', retStr);
       return retStr;
 
     }
