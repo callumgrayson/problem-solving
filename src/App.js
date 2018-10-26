@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import algorithms from './Components/rosetta-01-100Doors';
-import algorithms02 from './Components/rosetta-02-24Game';
-import Euler from './Components/euler';
+import algorithms from './Components/Rosetta-01-100Doors';
+import algorithms02 from './Components/Rosetta-02-24Game';
+import Euler from './Components/Euler';
+import Simulations from './Components/Simulations';
 import './App.css';
 
 const AlgsProject = () => {
@@ -12,9 +13,10 @@ const AlgsProject = () => {
   const outputR02b = () => algorithms02.operationCombinations(4); // 4 operations
   const outputE01 = () => Euler.MultiplesOf3and5(49); // 4 operations
   const outputE02 = () => Euler.SumEvenFibs(23); // 4 operations
+  const outputS01 = () => Simulations.playGames(300, 7, 4, 5); // rounds, stopA, stopB
 
   
-  const show = outputE01();
+  const show = outputS01(); // Change this to see an algorithm output
 
   return (
     <div>
