@@ -8,7 +8,7 @@ const algorithms = {
   // This algorithm visits all items 100 times
   // This array algorithm is 3 times slower than the obj algorithm below
   getFinalOpenedDoors(numDoors) {
-    const startTime = Date.now();
+    // const startTime = Date.now();
     let arr = [];
     
     for (let i = 1; i <= numDoors; i++) {
@@ -25,14 +25,14 @@ const algorithms = {
       return num > 0;
     });
 
-    const endTime = Date.now();
+    // const endTime = Date.now();
     // console.log(endTime - startTime);
 
     return retArr;
   },
 
   getFinalOpenedDoorsSkips(numDoors) {
-    const startTime = Date.now();
+    // const startTime = Date.now();
     let arr = [];
     
     for (let i = 1; i <= numDoors; i++) {
@@ -51,7 +51,7 @@ const algorithms = {
       return num > 0;
     });
 
-    const endTime = Date.now();
+    // const endTime = Date.now();
     // console.log(endTime - startTime);
 
     return retArr;
@@ -61,7 +61,7 @@ const algorithms = {
   // rather than visiting all items it just visits the relevant ones
   getFinalOpenedDoorsObjSkips(numDoors) {
 
-    const startTime = Date.now();
+    // const startTime = Date.now();
     let obj = {};
     
     for (let i = 1; i <= numDoors; i++) {
@@ -82,7 +82,7 @@ const algorithms = {
       }
     }
 
-    const endTime = Date.now();
+    // const endTime = Date.now();
     // console.log(endTime - startTime);
 
     return retArr;

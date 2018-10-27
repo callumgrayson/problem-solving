@@ -1,37 +1,5 @@
 const algorithms02 = {
-  solve2(numStr) {
-    console.log(numStr);
-    const lenStr = numStr.length;
-    console.log(lenStr);
-    const n0 = [...numStr.split('')];
-
-    let combos = [];
-    
-    for (let i = 0; i < 4; i++) {
-      console.log(`************* start of ith: ${i}`);
-      let ni = [...n0];
-      const pi = [].concat(ni.splice(i, 1));
-
-      for (let j = 0; j < 3; j++) {
-        let nj = [...ni];
-        const pj = [...pi].concat(nj.splice(j, 1));
-
-        for (let k = 0; k < 2; k++) {
-          let nk = [...nj];
-          const pk = [...pj].concat(nk.splice(k, 1));
-
-          for (let m = 0; m < 1; m++) {
-            let nm = [...nk];
-            const pm = [...pk].concat(nm.splice(m, 1));
-            combos.push(pm);
-          }
-        }
-      }
-    }
-    console.log('combos: ', combos);
-    return numStr;
-  },
-
+  
   solve24(numStr) {
     if (!numStr.length) {return 'Nothing to work with!'};
 
@@ -41,7 +9,7 @@ const algorithms02 = {
     let combos = [];
     this.removeOneDigit(nArr, pArr, combos);
     combos = this.retInts(combos);
-    console.log(combos);
+    // console.log(combos);
     
     const ops = this.operationCombinations(4);
     // console.log(ops);
@@ -67,7 +35,12 @@ const algorithms02 = {
     const stringsArray = this.convertArraysToString(sets24);
     // console.log(stringsArray);
 
-    return sets24;
+    const uniqueStringsArray = this.getUniqueStrings(stringsArray);
+    const lenUSA = uniqueStringsArray.length;
+    const randLen = Math.ceil(Math.random() * lenUSA);
+
+    // return [uniqueStringsArray[randLen]];
+    return uniqueStringsArray;
   },
 
   removeOneDigit(nArr, pArr, x) {
@@ -280,7 +253,8 @@ const algorithms02 = {
       // push phaseStr to returnObj
       retArr.push(phaseStr);
       // return returnObj
-       // ************************** And replace this below to include all items
+      // ************************** And replace this below to include all items
+      
     }
     return retArr;
   },
@@ -362,19 +336,6 @@ const algorithms02 = {
     const opInd2 = inObj.phase2.opInd;
     const opInd3 = inObj.phase3.opInd;
 
-
-    // conditions G
-    const testG = (opP1 === 'a' && opP2 === 'm' && opP3 === 'a') && (opInd3 === 1);
-    // conditions F
-    const testF = (opP1 === 'a' && opP2 === 'a' && opP3 === 'm') && (opInd3 === 1);
-    // conditions DE
-    const testDE = (opP2 === 'a' && opP3 === 'm');
-    // conditions ABC
-    const testABC = (opP1 === 'a' && opP2 === 'm' && Math.abs(opInd1 - opInd2) === 1);
-    // Need to add in condition for if the result of operation is negative
-    const testNeg1 = ((opPat1 === 2 && opPat2 === 2) || (opPat2 === 2 && opPat3 === 2));
-    // console.log('Negative! ', testNeg1);
-
     // Get string vals of ops
     let getOp = (key) => {
       if (key === 1) {
@@ -392,181 +353,353 @@ const algorithms02 = {
     const op2Str = getOp(opPat2);
     const op3Str = getOp(opPat3);
 
-    const g1Arr = [d1a, op1Str, d1b, {phase: 1}];
-    const g2Arr = [d2, op2Str,, {phase: 2}];
-    const g3Arr = [d3, op3Str,, {phase: 3}];
-
-    // console.log(g1Arr);
-    // console.log(g2Arr);
-    // console.log(g3Arr);
-
-    // TO Be REDUNDANT*********
-    // const _chunk1Left = opInd1 === 0 ? g1Str : (opInd2 === 0 ? g2Str : g3Str);
-    // const _chunk2Mid = opInd1 === 1 ? g1Str : (opInd2 === 1 ? g2Str : g3Str);
-    // const _chunk3End = opInd1 === 2 ? g1Str : (opInd2 === 2 ? g2Str : g3Str);
-    // END of REDUNDANT__________
-
-    const chunk1Left = opInd1 === 0 ? g1Arr : (opInd2 === 0 ? g2Arr : g3Arr);
-    const chunk2Mid = opInd1 === 1 ? g1Arr : (opInd2 === 1 ? g2Arr : g3Arr);
-    const chunk3End = opInd1 === 2 ? g1Arr : (opInd2 === 2 ? g2Arr : g3Arr);
-
-    // console.log(chunk1Left, chunk2Mid, chunk3End);
-
-    // TEMP ONLY DELETE after use ******************************************
-
-    // const gStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
-    //   console.log('testG ', gStr);
-    //   const fStr = `(${chunk1Left})${chunk2Mid}(${chunk3End})`;
-    //   console.log('testF ', fStr);
-    //   const deStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
-    //   console.log('testDE ', deStr);
-    //   const abcStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
-    //   console.log('testABC ', abcStr);
-
-
-    // END of TEMP section _________________________________________________
-
-    const cL1 = chunk1Left[0];
-    const cL2 = chunk1Left[2];
-    const cLop = chunk1Left[1];
-    const cLphase = chunk1Left[3].phase;
-    const cM1 = chunk2Mid[0];
-    const cM2 = chunk2Mid[2]; 
-    const cMop = chunk2Mid[1];
-    const cMphase = chunk2Mid[3].phase;
-    const cR1 = chunk3End[0];
-    const cR2 = chunk3End[2];
-    const cRop = chunk3End[1];
-    const cRphase = chunk3End[3].phase;
+    // Brackets around phase1
+    const phase1Str = `(${d1a}${op1Str}${d1b})`;
     
-    // Conditionally adding brackets
-    if (testNeg1) {
-
-      // Must have brackets if a negative is produced
-      // 
-      const bracketChunk = (opPat1 === 2 && opPat2 === 2) ? 2 : 3;
-
-      const negArr = [];
-
-      if (cLphase === 1) {
-        const tempChunk = [cL1, cLop, cL2];
-        negArr.push(...tempChunk);
-      } else {
-        negArr.push(cL1, cLop);
-      }
-
-      if (bracketChunk === 2) {
-        const tempChunk2 = ['(', cM1, cMop, cM2, ')'];
-        negArr.push(...tempChunk2);
-      } else if (cLphase === 1) {
-        negArr.push(cMop, cM1);
-      } else {
-        negArr.push(cM1, cMop)
-      }
-
-      if (cRphase === 1) {
-        const tempChunk3 = [cR1, cRop, cR2];
-        negArr.push(...tempChunk3);
-      } else {
-        negArr.push(cRop, cR1)
-      }
-
-      const negStr = negArr.join('');
-      // console.log('negStr ', negStr);
-      return negStr;
-
-
-    } else if (testG) {
-
-      // G string has no brackets - special case of no brackets though
-      const gStr = [];
-      gStr.push(cL1, cLop);
-      if (cL2) {
-        gStr.push(cL2);
-        gStr.push(cMop, cM1);
-        gStr.push(cRop, cR1);
-      } else if (cM2) {
-        gStr.push(cM1, cMop, cM2);
-        gStr.push(cRop, cR1);
-      } else if (cR2) {
-        gStr.push(cMop, cM1);
-        gStr.push(cR1, cRop, cR2);
-      } 
-
-      const retStr = gStr.join('');
-      // console.log('testG ', retStr);
-      return 'gStr';
-
-    } else if (testF) {
-      
-      // F string has two sets of brackets
-      const fStr = `(${chunk1Left})${chunk2Mid}(${chunk3End})`;
-      // console.log('testF ');
-      return 'fStr not completed';
-      
-    } else if (testDE) {
-      // Big brackets, one of two positions
-      const deStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
-      // console.log('testDE ');
-      return 'deStr not completed';
-
-    } else if (testABC) {
-      // Small brackets, one of three positions
-      // Only one bracket and it goes around the phase 1 items
-      const abcArr = [];
-
-      if (cLphase === 1) {
-        const tempChunk = ['(', cL1, cLop, cL2, ')'];
-        abcArr.push(...tempChunk);
-      } else {
-        abcArr.push(cL1, cLop);
-      }
-
-      if (cMphase === 1) {
-        const tempChunk2 = ['(', cM1, cMop, cM2, ')'];
-        abcArr.push(...tempChunk2);
-      } else if (cLphase === 1) {
-        abcArr.push(cMop, cM1);
-      } else {
-        abcArr.push(cM1, cMop)
-      }
-
-      if (cRphase === 1) {
-        const tempChunk3 = ['(', cR1, cRop, cR2, ')'];
-        abcArr.push(...tempChunk3);
-      } else {
-        abcArr.push(cRop, cR1)
-      }
-
-      const abcStr = abcArr.join('');
-      console.log('abcStr ', abcStr);
-      return abcStr;
-
+    // Brackets around phase2
+    let phase2Str = '';
+    const opDiff12 = opInd2 - opInd1;
+    if (opDiff12 === 2) {
+      phase2Str = `(${d3}${op2Str}${d2})`;
+    } else if (opDiff12 === -2) {
+      phase2Str = `(${d2}${op2Str}${d3})`
+    } else if (opDiff12 === 1) {
+      phase2Str = `(${phase1Str}${op2Str}${d2})`;
+    } else if (opDiff12 === -1) {
+      phase2Str = `(${d2}${op2Str}${phase1Str})`;
     } else {
-
-      // No brackets and put together in order of appearance
-      const noBrStr = [];
-      noBrStr.push(cL1, cLop);
-      if (cL2) {
-        noBrStr.push(cL2);
-        noBrStr.push(cMop, cM1);
-        noBrStr.push(cRop, cR1);
-      } else if (cM2) {
-        noBrStr.push(cM1, cMop, cM2);
-        noBrStr.push(cRop, cR1);
-      } else if (cR2) {
-        noBrStr.push(cMop, cM1);
-        noBrStr.push(cR1, cRop, cR2);
-      } 
-
-      const retStr = noBrStr.join('');
-      // console.log('noBrStr ', retStr);
-      return retStr;
-
+      console.log('WTF?? Something does not make sense');
     }
 
+    // String phase3
+    // console.log(opInd1, opInd2, opInd3);
+    let phase3Str = '';
+    if (opInd3 === 1 && opInd1 === 0) {
+      phase3Str = `${phase1Str}${op3Str}${phase2Str}`;
+    } else if (opInd3 === 1 && opInd1 === 2) {
+      phase3Str = `${phase2Str}${op3Str}${phase1Str}`;
+    } else if (opInd3 === 0) {
+      phase3Str = `${d3}${op3Str}${phase2Str}`;
+    } else if (opInd3 === 2) {
+      phase3Str = `${phase2Str}${op3Str}${d3}`;
+    } else {
+      console.log('WTF?? Something does not make sense');
+    }    
+    // console.log('phase3Str: ', phase3Str, eval(phase3Str));
+    
+    // Brackets around phase1 only // Might need to tweak bottom two ???
+    let only1Str = '';
+    if (opDiff12 === 2) {
+      only1Str = `${phase1Str}${op3Str}${d3}${op2Str}${d2}`;
+    } else if (opDiff12 === -2) {
+      only1Str = `${d2}${op2Str}${d3}${op3Str}${phase1Str}`;
+    } else if (opDiff12 === 1 && opInd1 === 0) {
+      only1Str = `${phase1Str}${op2Str}${d2}${op3Str}${d3}`;
+    } else if (opDiff12 === 1 && opInd1 === 1) {
+      only1Str = `${d3}${op3Str}${phase1Str}${op2Str}${d2}`;
+    } else if (opDiff12 === -1 && opInd1 === 2) {
+      only1Str = `${d3}${op3Str}${d2}${op2Str}${phase1Str}`;
+    } else if (opDiff12 === -1 && opInd1 === 1) {
+      only1Str = `${d2}${op2Str}${phase1Str}${op3Str}${d3}`;
+    } else {
+      console.log('WTF?? Something does not make sense');
+    }
+    // console.log('only1Str: ', only1Str, eval(only1Str));
+    
+    // Phase1 String with no brackets
+    const phase1StrNoBrackets = `${d1a}${op1Str}${d1b}`;
+    
+    // Brackets around phase2
+    let only2Str = '';
+    if (opDiff12 === 2) {
+      only2Str = `${phase1StrNoBrackets}${op3Str}(${d3}${op2Str}${d2})`;
+    } else if (opDiff12 === -2) {
+      only2Str = `(${d2}${op2Str}${d3})${op3Str}${phase1StrNoBrackets}`;
+    } else if (opDiff12 === 1 && opInd1 === 0) {
+      only2Str = `(${phase1StrNoBrackets}${op2Str}${d2})${op3Str}${d3}`;
+    } else if (opDiff12 === 1 && opInd1 === 1) {
+      only2Str = `${d3}${op3Str}(${phase1StrNoBrackets}${op2Str}${d2})`;
+    } else if (opDiff12 === -1 && opInd1 === 2) {
+      only2Str = `${d3}${op3Str}(${d2}${op2Str}${phase1StrNoBrackets})`;
+    } else if (opDiff12 === -1 && opInd1 === 1) {
+      only2Str = `(${d2}${op2Str}${phase1StrNoBrackets})${op3Str}${d3}`;
+    } else {
+      console.log('WTF?? Something does not make sense');
+    }
+    // console.log('only2Str: ', only2Str, eval(only2Str));
+
+    // No brackets
+    let noBracketsStr = ``;
+    if (opDiff12 === 2) {
+      noBracketsStr = `${phase1StrNoBrackets}${op3Str}${d3}${op2Str}${d2}`;
+    } else if (opDiff12 === -2) {
+      noBracketsStr = `${d2}${op2Str}${d3}${op3Str}${phase1StrNoBrackets}`;
+    } else if (opDiff12 === 1 && opInd1 === 0) {
+      noBracketsStr = `${phase1StrNoBrackets}${op2Str}${d2}${op3Str}${d3}`;
+    } else if (opDiff12 === 1 && opInd1 === 1) {
+      noBracketsStr = `${d3}${op3Str}${phase1StrNoBrackets}${op2Str}${d2}`;
+    } else if (opDiff12 === -1 && opInd1 === 2) {
+      noBracketsStr = `${d3}${op3Str}${d2}${op2Str}${phase1StrNoBrackets}`;
+    } else if (opDiff12 === -1 && opInd1 === 1) {
+      noBracketsStr = `${d2}${op2Str}${phase1StrNoBrackets}${op3Str}${d3}`;
+    } else {
+      console.log('WTF?? Something does not make sense');
+    }
+    // console.log('noBracketsStr: ', noBracketsStr, eval(noBracketsStr));
+
+    // tests: brackets12 === noBrackets, brackets12 === brackets1, brackets12 === brackets2
+    // const test0 = brackets12 === noBrackets;
+    // const test1 = brackets12 === Brackets1;
+    // const test2 = brackets12 === Brackets2;
+    // Compare: phase3Str, only1Str, only2Str, noBracketsStr
+    let finalStr = '';
+    if (eval(noBracketsStr) === eval(phase3Str)) {
+      finalStr = noBracketsStr;
+    } else if (eval(only2Str) === eval(phase3Str)) {
+      finalStr = only2Str;
+    } else if (eval(only1Str) === eval(phase3Str)) {
+      finalStr = only1Str;
+    } else {
+      finalStr = phase3Str;
+    }
+
+    return finalStr;
   },
 
+  getUniqueStrings(arr) {
+
+    // Take arr, sort, remove duplicates, return
+    let retArr = [];
+    const sortArr = [...arr];
+
+    const sortedArr = sortArr.sort();
+
+    retArr = sortedArr.reduce((acc, val) => {
+      return acc.includes(val) ? acc : acc.concat(val);
+    }, []);
+
+    return retArr;
+
+  },
 }
 
 export default algorithms02;
+
+// solve2(numStr) {
+//   console.log(numStr);
+//   const lenStr = numStr.length;
+//   console.log(lenStr);
+//   const n0 = [...numStr.split('')];
+
+//   let combos = [];
+  
+//   for (let i = 0; i < 4; i++) {
+//     console.log(`************* start of ith: ${i}`);
+//     let ni = [...n0];
+//     const pi = [].concat(ni.splice(i, 1));
+
+//     for (let j = 0; j < 3; j++) {
+//       let nj = [...ni];
+//       const pj = [...pi].concat(nj.splice(j, 1));
+
+//       for (let k = 0; k < 2; k++) {
+//         let nk = [...nj];
+//         const pk = [...pj].concat(nk.splice(k, 1));
+
+//         for (let m = 0; m < 1; m++) {
+//           let nm = [...nk];
+//           const pm = [...pk].concat(nm.splice(m, 1));
+//           combos.push(pm);
+//         }
+//       }
+//     }
+//   }
+//   console.log('combos: ', combos);
+//   return numStr;
+// },
+
+// // conditions G
+// const testG = (opP1 === 'a' && opP2 === 'm' && opP3 === 'a') && (opInd3 === 1);
+// // conditions F
+// const testF = (opP1 === 'a' && opP2 === 'a' && opP3 === 'm') && (opInd3 === 1);
+// // conditions DE
+// const testDE = (opP2 === 'a' && opP3 === 'm');
+// // conditions ABC
+// const testABC = (opP1 === 'a' && opP2 === 'm' && Math.abs(opInd1 - opInd2) === 1);
+// // Need to add in condition for if the result of operation is negative
+// const testNeg1 = ((opPat1 === 2 && opPat2 === 2) || (opPat2 === 2 && opPat3 === 2));
+// // console.log('Negative! ', testNeg1);
+
+// // Get string vals of ops
+// let getOp = (key) => {
+//   if (key === 1) {
+//     return '+';
+//   } else if (key === 2) {
+//     return '-';
+//   } else if (key === 3) {
+//     return '*';
+//   } else if (key === 4) {
+//     return '/';
+//   }
+// }
+
+// const op1Str = getOp(opPat1);
+// const op2Str = getOp(opPat2);
+// const op3Str = getOp(opPat3);
+
+// const g1Arr = [d1a, op1Str, d1b, {phase: 1}];
+// const g2Arr = [d2, op2Str, [], {phase: 2}];
+// const g3Arr = [d3, op3Str, [], {phase: 3}];
+
+// // console.log(g1Arr);
+// // console.log(g2Arr);
+// // console.log(g3Arr);
+
+// // TO Be REDUNDANT*********
+// // const _chunk1Left = opInd1 === 0 ? g1Str : (opInd2 === 0 ? g2Str : g3Str);
+// // const _chunk2Mid = opInd1 === 1 ? g1Str : (opInd2 === 1 ? g2Str : g3Str);
+// // const _chunk3End = opInd1 === 2 ? g1Str : (opInd2 === 2 ? g2Str : g3Str);
+// // END of REDUNDANT__________
+
+// const chunk1Left = opInd1 === 0 ? g1Arr : (opInd2 === 0 ? g2Arr : g3Arr);
+// const chunk2Mid = opInd1 === 1 ? g1Arr : (opInd2 === 1 ? g2Arr : g3Arr);
+// const chunk3End = opInd1 === 2 ? g1Arr : (opInd2 === 2 ? g2Arr : g3Arr);
+
+// // console.log(chunk1Left, chunk2Mid, chunk3End);
+
+
+// const cL1 = chunk1Left[0];
+// const cL2 = chunk1Left[2];
+// const cLop = chunk1Left[1];
+// const cLphase = chunk1Left[3].phase;
+// const cM1 = chunk2Mid[0];
+// const cM2 = chunk2Mid[2]; 
+// const cMop = chunk2Mid[1];
+// const cMphase = chunk2Mid[3].phase;
+// const cR1 = chunk3End[0];
+// const cR2 = chunk3End[2];
+// const cRop = chunk3End[1];
+// const cRphase = chunk3End[3].phase;
+
+// // Conditionally adding brackets
+// if (testNeg1) {
+
+//   // Must have brackets if a negative is produced
+//   // 
+//   const bracketChunk = (opPat1 === 2 && opPat2 === 2) ? 2 : 3;
+
+//   const negArr = [];
+
+//   if (cLphase === 1) {
+//     const tempChunk = [cL1, cLop, cL2];
+//     negArr.push(...tempChunk);
+//   } else {
+//     negArr.push(cL1, cLop);
+//   }
+
+//   if (bracketChunk === 2) {
+//     const tempChunk2 = ['(', cM1, cMop, cM2, ')'];
+//     negArr.push(...tempChunk2);
+//   } else if (cLphase === 1) {
+//     negArr.push(cMop, cM1);
+//   } else {
+//     negArr.push(cM1, cMop)
+//   }
+
+//   if (cRphase === 1) {
+//     const tempChunk3 = [cR1, cRop, cR2];
+//     negArr.push(...tempChunk3);
+//   } else {
+//     negArr.push(cRop, cR1)
+//   }
+
+//   const negStr = negArr.join('');
+//   // console.log('negStr ', negStr);
+//   return negStr;
+
+
+// } else if (testG) {
+
+//   // G string has no brackets - special case of no brackets though
+//   const gStr = [];
+//   gStr.push(cL1, cLop);
+//   if (cL2) {
+//     gStr.push(cL2);
+//     gStr.push(cMop, cM1);
+//     gStr.push(cRop, cR1);
+//   } else if (cM2) {
+//     gStr.push(cM1, cMop, cM2);
+//     gStr.push(cRop, cR1);
+//   } else if (cR2) {
+//     gStr.push(cMop, cM1);
+//     gStr.push(cR1, cRop, cR2);
+//   } 
+
+//   const retStr = gStr.join('');
+//   // console.log('testG ', retStr);
+//   return 'gStr';
+
+// } else if (testF) {
+  
+//   // F string has two sets of brackets
+//   const fStr = `(${chunk1Left})${chunk2Mid}(${chunk3End})`;
+//   // console.log('testF ');
+//   return 'fStr not completed';
+  
+// } else if (testDE) {
+//   // Big brackets, one of two positions
+//   const deStr = `${chunk1Left}${chunk2Mid}${chunk3End}`;
+//   // console.log('testDE ');
+//   return 'deStr not completed';
+
+// } else if (testABC) {
+//   // Small brackets, one of three positions
+//   // Only one bracket and it goes around the phase 1 items
+//   const abcArr = [];
+
+//   if (cLphase === 1) {
+//     const tempChunk = ['(', cL1, cLop, cL2, ')'];
+//     abcArr.push(...tempChunk);
+//   } else {
+//     abcArr.push(cL1, cLop);
+//   }
+
+//   if (cMphase === 1) {
+//     const tempChunk2 = ['(', cM1, cMop, cM2, ')'];
+//     abcArr.push(...tempChunk2);
+//   } else if (cLphase === 1) {
+//     abcArr.push(cMop, cM1);
+//   } else {
+//     abcArr.push(cM1, cMop)
+//   }
+
+//   if (cRphase === 1) {
+//     const tempChunk3 = ['(', cR1, cRop, cR2, ')'];
+//     abcArr.push(...tempChunk3);
+//   } else {
+//     abcArr.push(cRop, cR1)
+//   }
+
+//   const abcStr = abcArr.join('');
+//   console.log('abcStr ', abcStr);
+//   return abcStr;
+
+// } else {
+
+//   // No brackets and put together in order of appearance
+//   const noBrStr = [];
+//   noBrStr.push(cL1, cLop);
+//   if (cL2) {
+//     noBrStr.push(cL2);
+//     noBrStr.push(cMop, cM1);
+//     noBrStr.push(cRop, cR1);
+//   } else if (cM2) {
+//     noBrStr.push(cM1, cMop, cM2);
+//     noBrStr.push(cRop, cR1);
+//   } else if (cR2) {
+//     noBrStr.push(cMop, cM1);
+//     noBrStr.push(cR1, cRop, cR2);
+//   } 
+
+//   const retStr = noBrStr.join('');
+//   // console.log('noBrStr ', retStr);

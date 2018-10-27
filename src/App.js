@@ -9,14 +9,15 @@ const AlgsProject = () => {
   const outputR01a = () => algorithms.getFinalOpenedDoors(100);
   const outputR01b = () => algorithms.getFinalOpenedDoorsSkips(100);
   const outputR01c = () => algorithms.getFinalOpenedDoorsObjSkips(100);
-  const outputR02a = () => algorithms02.solve24('2456'); // Input digits
+  const outputR02a = () => algorithms02.solve24('4878'); // Input digits 4878 1234 6789 1127 1569
   const outputR02b = () => algorithms02.operationCombinations(4); // 4 operations
   const outputE01 = () => Euler.MultiplesOf3and5(49); // 4 operations
   const outputE02 = () => Euler.SumEvenFibs(23); // 4 operations
   const outputS01 = () => Simulations.playGames(300, 7, 4, 5); // rounds, stopA, stopB
+  const outputz = (str) => {return [eval(str)]}; // rounds, stopA, stopB
 
   
-  const show = outputS01(); // Change this to see an algorithm output
+  const show = outputR02a(); // Change this to see an algorithm output
 
   return (
     <div>
