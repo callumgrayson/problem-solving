@@ -3,6 +3,7 @@ import algorithms from './Components/Rosetta-01-100Doors';
 import algorithms02 from './Components/Rosetta-02-24Game';
 import Euler from './Components/Euler';
 import Simulations from './Components/Simulations';
+import HackerRank from './Components/HackerRank';
 import './App.css';
 
 const AlgsProject = () => {
@@ -15,9 +16,12 @@ const AlgsProject = () => {
   const outputE02 = () => Euler.SumEvenFibs(23); // 4 operations
   const outputS01 = () => Simulations.playGames(300, 7, 4, 5); // rounds, stopA, stopB
   const outputz = (str) => {return [eval(str)]}; // rounds, stopA, stopB
+  const outputH01 = () => HackerRank.waitingTime([1,1,1,1], 0);
+  const outputH02 = () => HackerRank.reformatDate();
+  const outputH03 = () => HackerRank.arrayPlay();
 
   
-  const show = outputR02a(); // Change this to see an algorithm output
+  const show = outputH03(); // Change this to see an algorithm output
 
   return (
     <div>
