@@ -19,9 +19,10 @@ const AlgsProject = () => {
   const outputH01 = () => HackerRank.waitingTime([1,1,1,1], 0);
   const outputH02 = () => HackerRank.reformatDate();
   const outputH03 = () => HackerRank.arrayPlay();
+  const outputE03 = () => Euler.largestPrimeFactor(600851475143);
 
   
-  const show = outputH03(); // Change this to see an algorithm output
+  const show = outputE03(); // Change this to see an algorithm output
 
   return (
     <div>

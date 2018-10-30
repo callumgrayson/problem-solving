@@ -45,7 +45,48 @@ const Euler = {
 
     console.log(arr, retVal);
     return [retVal];
-  }
+  },
+
+  largestPrimeFactor(number) {
+
+    // fa is factorsArray
+    // e is end
+    // n is number
+    // fc is factor2
+    // iP is isPrime
+    // n2 is number2
+    // ln is length of fa
+
+    let n = number;
+    let fa = [];
+    const end = Math.ceil(Math.sqrt(n));
+    
+    if (n === 1) return [1];
+    if (n === 2) return [2];
+
+    for (let i = 1; i <= end; i ++) {
+      if (n % i === 0) {
+        const fc2 = n / i;
+        fa = fa.concat(i, fc2);
+      }
+    }
+
+    fa.sort((a, b) => b - a);
+
+    const ip = (n2) => {
+      for (let j = 2; j <= Math.sqrt(n2); j++) {
+        if (n2 % j === 0) return false;
+      }
+
+      return true;
+    }
+
+    let ln = fa.length;
+    for (let k = 0; k < ln; k++) {
+      let p = ip(fa[k]);
+      if (p === true) return [fa[k]];
+    }
+  },
 }
 
 export default Euler;
