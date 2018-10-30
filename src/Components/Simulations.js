@@ -1,24 +1,132 @@
 const Simulations = {
 
   // Simulate any number of n length games
+  // k is number of games
+  // n is number of rounds per game
+  // a is number of rounds player A plays
+  // b is number of rounds player B plays
   playGames(k, n , a, b) {
     let aGames = 0;
     let bGames = 0;
     let count = 0; 
-    console.log(k, n, a, b);
 
+    let roundLengthsList = [];
+    let roundScoresList = {};
+    let gameRoundsList = [];
+    let gameScoresList = [];
+
+    // play k number of games and record results
     while (count < k) {
-      let gameWinner = this.playNRounds(n, a, b);
+      let gameResults = this.playNRounds(n, a, b);
+      // console.log(gameResults);
+      let gameWinner = gameResults.gameWinner;
       if (gameWinner === 'A') {aGames += 1}; 
       if (gameWinner === 'B') {bGames += 1};
       count++;
+
+      // loop through roundLengths and send to gamesStats
+      // console.log(gameResults);
+      for (let c in gameResults.roundLengths) {
+        let gl = gameResults.roundLengths[c];
+        // console.log(gl);
+        if (roundLengthsList[gl]) {
+          roundLengthsList[gl].count += 1;
+    
+        } else {
+          roundLengthsList[gl] = {count: 1};
+        }
+      }
+
+      // loop through roundScores and send to gameStats
+      for (let d in gameResults.roundScores) {
+        let gs = gameResults.roundScores[d];
+        // console.log(gs);
+        if (roundScoresList[gs]) {
+          roundScoresList[gs] += 1;
+    
+        } else {
+          roundScoresList[gs] = 1;
+        }
+      }
+
+      // sum the number of rounds in this game and record
+      const sumRounds = gameResults.roundLengths.reduce((acc, v) => acc + v);
+      gameRoundsList.push(sumRounds);
+      
+      // sum the scores of each round in this game and record
+      const sumScores = gameResults.roundScores.reduce((acc, v) => acc + v);
+      gameScoresList.push(sumScores);
+
     }
+
+    // console.log(roundLengthsList);
+    // console.log(roundScoresList);
+
 
     let aPercent = Math.round(aGames / k * 100);
     let bPercent = Math.round(bGames / k * 100);
-    console.log(aGames, bGames, count, aPercent, bPercent);
+    // console.log(aGames, bGames, count, aPercent, bPercent);
 
-    return [`Total Games: ${k}`, `A: ${aGames} (${aPercent}%)`, `B: ${bGames} (${bPercent}%)`];
+    // Average round length
+    let meanGameRoundLength = (gameRoundsList.reduce((a, b) => a + b) / gameRoundsList.length);
+    meanGameRoundLength = Math.round(meanGameRoundLength * 10) / 10;
+    // console.log(meanGameRoundLength);
+
+    // Average round score
+    // console.log(gameScoresList);
+    let meanGameScore = (gameScoresList.reduce((a, b) => a + b) / gameScoresList.length); 
+    meanGameScore = Math.round(meanGameScore * 10) / 10;
+
+    // Get average round length by
+    // summing array index by count / sum of counts
+    // console.log(roundLengthsList);
+    let roundLengthSumCount = roundLengthsList.reduce((acc, v, i) => {
+      // console.log(acc.sum);
+      acc.sum += i * v.count;
+      acc.count += v.count;
+      return acc;
+    }, {sum: 0, count: 0});
+    const avRoundLength = Math.round(roundLengthSumCount.sum / roundLengthSumCount.count * 10) / 10;
+    // console.log(roundLengthSumCount);
+    // console.log(avRoundLength);
+
+    // Get average round score by
+    // summing array index * value / sum of values (counts)
+    // console.log(roundScoresList);
+
+    let roundScoreSumCount = (obj) => {
+      let acc = {sum: 0, count: 0};
+      for (let j in obj) {
+        acc.sum += j * obj[j];
+        acc.count += obj[j];
+      }
+      return acc;
+    }
+
+    let abc = roundScoreSumCount(roundScoresList);
+    // console.log(abc);
+    const avRoundScore = Math.round(abc.sum / abc.count * 10) / 10;
+    // console.log(avRoundScore);
+
+
+    // return an array
+    // array should have game lengths + count
+    // array should have total games + count
+    // array should have average game length
+    // array should have average game score
+    // array should have average round length
+    // array should have average round score
+    let retArray = [
+      `Total Games: ${k}`,
+      `Mean Game Rounds: ${meanGameRoundLength}`,
+      `Mean Game Score: ${meanGameScore}`,
+      `Mean Round Length: ${avRoundLength}`,
+      `Mean Round Score: ${avRoundScore}`,
+    ];
+
+
+
+    return retArray;
   },
   
   // Simulate any number of rounds
@@ -32,16 +140,31 @@ const Simulations = {
     let roundStats = [];
     let newRound = {};
     let roundLength = 0;
+    let roundScore = 0;
     let winsCount = {a: 0, b: 0, tie: 0, none: 0};
     let scoreSumA = 0;
     let scoreSumB = 0;
     let winnerGame = '';
+    let retRound = {
+      gameWinner: '',
+      roundLengths: [],
+      roundScores: [],
+      gameScore: 0,
+    };
 
     while (nRounds.length < n) {
       // newRound will be an array of objects {die1: , die2:, cuml: }
       newRound = this.playOneRound(stop);
       nRounds.push(newRound);
       roundLength = newRound.allRolls.length;
+      if (newRound.allRolls[roundLength - 2]) {
+        roundScore = newRound.allRolls[roundLength - 2].cuml;
+      } else {
+        roundScore = 0;
+      }
+
+      retRound.roundLengths.push(roundLength);
+      retRound.roundScores.push(roundScore);
       let winner = newRound.winner;
       winsCount[winner] += 1;
       scoreSumA += newRound.scoreA;
@@ -53,8 +176,6 @@ const Simulations = {
       } else {
         roundStats[roundLength] = {count: 1};
       }
-      // console.log(roundStats[roundLength]);
-
     }
 
     if (scoreSumA === scoreSumB) {
@@ -71,16 +192,29 @@ const Simulations = {
 
     roundStatsRet.push(`A score: ${scoreSumA} ~ B score: ${scoreSumB} ~ Game winner is ${winnerGame}`);
 
+    // calculate game score and update retRound object
+    const gameScore = retRound.roundScores.reduce((acc, v) => {
+      return acc + v;
+    });
+    retRound.gameScore = gameScore;
+
+    // set gameWinner in retRound
+    retRound.gameWinner = winnerGame;
+
+
+    // console.log(nRounds);
     // console.log(roundStats);
     // console.log(roundStatsRet);
+    // console.log(retRound);
 
-    return winnerGame;
+    // this object must have a gameWinner property
+    return retRound;
   },
   
   // play a round until double or PlayerA ends and PlayerB ends
   playOneRound(stop) {
     // console.log(stop);
-    let resultsArr = [];
+
     let end = false;
     let roll = [];
     let allRolls = [];
@@ -153,6 +287,17 @@ const Simulations = {
 
     return {die1, die2};
   },
+
+  getRoundLengths(lengthsArray) {
+    const la = lengthsArray;
+    return 'nothing yet';
+  },
+
+  // 
+  getRoundScores(scoresArray) {
+    const sa = scoresArray;
+    return 'nothing yet';
+  }
 }
 
 export default Simulations;
