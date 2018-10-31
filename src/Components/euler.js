@@ -87,6 +87,50 @@ const Euler = {
       if (p === true) return [fa[k]];
     }
   },
+
+  largestPalindromeProduct(n) {
+
+    // function takes any number, returns boolean
+    const palCheck = (num) => {
+
+      const ns = `${num}`;
+      const nStr = ns.split('');
+      const toRev = [...nStr];
+      const revN = toRev.reverse();
+
+      for (let i = 0; i < nStr.length; i++) {
+        if (nStr[i] !== revN[i]) return false;
+      }
+      return true;
+    }
+    
+    const max = 10 ** n - 1;
+
+    let largestPal = 0;
+    
+    for (let i = max; i > 0; i--) {
+      for (let j = max; j >= i; j--) {
+
+        const prod = i * j;
+        const pal = palCheck(prod); // boolean
+
+        if (pal && prod > largestPal) {
+          // console.log(prod, i, j);
+          largestPal = prod;
+        }
+      }
+
+      // If no other product can be greater than largest so far
+      // stop cycling
+      if (largestPal > i * max) {
+        // console.log('i & max & i*max', i, max, i * max);
+        break;
+      };
+    }
+
+    // console.log(largestPal);
+    return [largestPal];
+  },
 }
 
 export default Euler;
