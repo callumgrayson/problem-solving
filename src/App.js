@@ -15,16 +15,19 @@ const AlgsProject = () => {
   const outputE01 = () => Euler.MultiplesOf3and5(49); // 4 operations
   const outputE02 = () => Euler.SumEvenFibs(23); // 4 operations
   const outputS01 = () => Simulations.playGames(99999, 7, 999, 998); // rounds, stopA, stopB
-  const outputz = (str) => {return [eval(str)]}; // rounds, stopA, stopB
   const outputH01 = () => HackerRank.waitingTime([1,1,1,1], 0);
   const outputH02 = () => HackerRank.reformatDate();
   const outputH03 = () => HackerRank.arrayPlay();
   const outputE03 = () => Euler.largestPrimeFactor(600851475143);
-  const outputE04 = () => Euler.largestPalindromeProduct(5); // arg is number of digits
+  const outputE04 = () => Euler.largestPalindromeProduct(2); // arg is number of digits
+  const outputE05 = () => Euler.smallestMultiple(5); // Lowest common multiple of numbers 1...n
+  const outputH04 = () => HackerRank.diagonalDifference([[11,2,4],[4,5,6],[10,8,-12]]); // Difference of sum of diagonals of an array
+
+
 
 
   
-  const show = outputE04(); // Change this to see an algorithm output
+  const show = outputH04(); // Change this to see an algorithm output
 
   return (
     <div>

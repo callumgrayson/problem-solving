@@ -131,6 +131,17 @@ const HackerRank = {
     return [...retArr];
   },
 
+  diagonalDifference(arr) {
+    let lR = 0;
+    let rL = 0;
+    let n = arr.length;
+    for (let i = 0; i < n; i++) {
+      lR += arr[i][i];
+      rL += arr[i][n - i - 1];
+    }
+    return [Math.abs(lR - rL)];
+  },
+
 }
 
 

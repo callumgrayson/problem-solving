@@ -131,6 +131,70 @@ const Euler = {
     // console.log(largestPal);
     return [largestPal];
   },
+
+  smallestMultiple(n) {
+
+    if (n === 1) return [1];
+
+    // Splits any number into its prime factors
+    const splitPrimeFactors = (n1) => {
+      let pf = [];
+      if (n1 === 1) return 1;
+
+      let i = 2;
+      while (i <= n1) {
+        if (n1 % i === 0) {
+          pf.push(i);
+          n1 = n1 / i;
+          i = 2;
+        } else {i++;}
+        
+      }
+      console.log(pf);
+      return pf;
+    }
+
+    // Combines two arrays removing unnecessary repeats
+    const eliminateRepeats = (list, numArray) => {
+      let fl = [...list];
+      let na = [...numArray];
+      let temp = [];
+
+      for (let i = 0; i < na.length; i++) {
+        if (fl.includes(na[i])) {
+          let cutIndex = fl.indexOf(na[i]);          
+          temp.push(na[i]);
+          fl[cutIndex] = 1;
+          na[i] = 1;
+        }
+      }
+
+      const retArr1 = [...fl].concat([...temp], [...na]);
+      const retArr = [];
+
+      for (let j in retArr1) {
+        if (retArr1[j] > 1) {
+          retArr.push(retArr1[j]);
+        }
+      }
+
+      return retArr;
+    }
+
+    let spf = []; // split prime factors array
+    let cfl = []; // current factors list array
+    for (let k = 2; k <= n; k++) {
+      spf = splitPrimeFactors(k);
+      cfl = eliminateRepeats(cfl, spf);
+    }
+
+    console.log(cfl);
+
+    const smallestMultiple = cfl.reduce((a, b) => a * b);
+    return [smallestMultiple];
+  }
+
+  
 }
 
 export default Euler;
