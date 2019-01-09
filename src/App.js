@@ -12,8 +12,8 @@ const AlgsProject = () => {
   const outputR01c = () => algorithms.getFinalOpenedDoorsObjSkips(100);
   const outputR02a = () => algorithms02.solve24('4878'); // Input digits 4878 1234 6789 1127 1569
   const outputR02b = () => algorithms02.operationCombinations(4); // 4 operations
-  const outputE01 = () => Euler.MultiplesOf3and5(49); // 4 operations
-  const outputE02 = () => Euler.SumEvenFibs(23); // 4 operations
+  const outputE01 = () => Euler.MultiplesOf3and5(49); 
+  const outputE02 = () => Euler.SumEvenFibs(23); // 4 operations default:23
   const outputS01 = () => Simulations.playGames(99999, 7, 999, 998); // rounds, stopA, stopB
   const outputH01 = () => HackerRank.waitingTime([1,1,1,1], 0);
   const outputH02 = () => HackerRank.reformatDate();
@@ -27,7 +27,7 @@ const AlgsProject = () => {
 
 
   
-  const show = outputH04(); // Change this to see an algorithm output
+  const show = outputE05(); // Change this to see an algorithm output
 
   return (
     <div>
